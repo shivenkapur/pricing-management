@@ -1,1 +1,1 @@
-# pricing-management
+vercel --token=OiiNO8n9lMEEmUS7KEMe2TGD dev
