@@ -3,8 +3,7 @@ const basicAuth = require('express-basic-auth');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-import calculateCaregiverPrice from './api/calculateCaregiverPrice';
-import calculateClientCharges from './api/calculateClientCharges';
+import bookingAutomation from './api/bookingAutomation';
 
 const app = express();
 
@@ -19,8 +18,7 @@ app.use(cors({origin: true, credentials: true}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.post('/calculateCaregiverPrice', calculateCaregiverPrice);
-app.post('/calculateClientCharges', calculateClientCharges);
+app.post('/bookingAutomation', bookingAutomation);
 
 const port = 3000;
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))

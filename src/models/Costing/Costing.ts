@@ -1,6 +1,6 @@
-import { shiftCost, dayOrNightShift } from '../helper/shift';
-import { timeOverlap } from '../helper/date-time';
-import { holidays, getHolidayDate } from './Holidays';
+import { shiftCost, dayOrNightShift } from '../../helper/shift';
+import { timeOverlap } from '../../helper/date-time';
+import { holidays, getHolidayDate } from '../../data/Holidays';
 export class RangeCosting {
     
     ONE_HOUR: number = 60*60*1000;
@@ -64,19 +64,19 @@ export class RangeCosting {
 
 export class ContinuousRangeCosting extends RangeCosting{
     maxShiftHours: number;
-    dateRanges = [];
+    shiftDates = [];
     constructor(dateRange, caregiverRank, pricing, maxShiftHours) {
         super(dateRange, caregiverRank, pricing);
         this.maxShiftHours = maxShiftHours;
-        this.setDateRanges();
+        this.setShiftDates();
     }
 
-    setDateRanges() {
+    setShiftDates() {
         let startDate: Date = this.dateRange["Start Date"];
         while( startDate < this.dateRange["End Date"]){
             const endDate = Math.min(startDate.getTime() + this.maxShiftHours * this.ONE_HOUR, this.dateRange["End Date"].getTime());
-            this.dateRanges.push({
-                "Start Date": startDate,
+            this.shiftDates.push({
+                "Start Date": new Date(startDate),
                 "End Date": new Date(endDate)
             });
             
@@ -84,13 +84,13 @@ export class ContinuousRangeCosting extends RangeCosting{
         }
     }
 
-    getDateRanges(){
-        return this.dateRanges;
+    getShiftDates(){
+        return this.shiftDates;
     }
 
     rangesCostingDistribution(){
         const costingDistribution = [];
-        this.dateRanges.forEach(
+        this.shiftDates.forEach(
             dateRange => {
                 costingDistribution.push(this.costingDistribution(dateRange));
             }
@@ -101,22 +101,22 @@ export class ContinuousRangeCosting extends RangeCosting{
 }
 
 export class RecurringRangeCosting extends RangeCosting{
-    dateRanges = [];
+    shiftDates = [];
     constructor(dateRange, caregiverRank, pricing) {
         super(dateRange, caregiverRank, pricing);
-        this.setDateRanges();
+        this.setShiftDates();
     }
 
-    setDateRanges() {
+    setShiftDates() {
         const rangeStartDate: Date = this.dateRange["Start Date"];
         const rangeEndDate: Date = this.dateRange["End Date"];
 
         const startTime = {
-            hours: rangeStartDate.getHours(),
-            minutes: rangeStartDate.getMinutes()
+            hours: rangeStartDate.getUTCHours(),
+            minutes: rangeStartDate.getUTCMinutes()
         } , endTime = {
-            hours: rangeEndDate.getHours(),
-            minutes: rangeEndDate.getMinutes()
+            hours: rangeEndDate.getUTCHours(),
+            minutes: rangeEndDate.getUTCMinutes()
         };
 
         let startDate = rangeStartDate;
@@ -124,12 +124,12 @@ export class RecurringRangeCosting extends RangeCosting{
 
         while(endDate < rangeEndDate){
             endDate = new Date(startDate.getTime());
-            endDate.setHours(endTime.hours, endTime.minutes, 0);
+            endDate.setUTCHours(endTime.hours, endTime.minutes, 0);
 
             if(endDate.getTime() <= startDate.getTime())
                 endDate.setTime(endDate.getTime() + 24 * this.ONE_HOUR);
 
-            this.dateRanges.push({
+            this.shiftDates.push({
                 "Start Date": startDate,
                 "End Date": endDate
             });
@@ -138,13 +138,13 @@ export class RecurringRangeCosting extends RangeCosting{
         }
     }
 
-    getDateRanges(){
-        return this.dateRanges;
+    getShiftDates(){
+        return this.shiftDates;
     }
 
     rangesCostingDistribution(){
         const costingDistribution = [];
-        this.dateRanges.forEach(
+        this.shiftDates.forEach(
             dateRange => {
                 costingDistribution.push(this.costingDistribution(dateRange));
             }

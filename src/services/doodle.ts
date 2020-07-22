@@ -1,4 +1,5 @@
-var fetch = require("node-fetch");
+
+const fetch = require("node-fetch");
 
 export async function createDoodle(doodleData){
     let response = await fetch(`https://doodle.vercel.app/createPoll`,

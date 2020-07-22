@@ -1,4 +1,5 @@
-import { hongKongtoUTCTimestamp, timeOverlap } from './date-time';
+import { timeOverlap, utcToHongKongDate } from './date-time';
+import { ContinuousRangeCosting, RecurringRangeCosting } from '../models/Costing/Costing';
 
 export function shiftCost(hours, pricing, caregiverRank){
     let jobCost = 0;
@@ -20,16 +21,16 @@ export function shiftCost(hours, pricing, caregiverRank){
     return jobCost;
 }
 
-export function dayOrNightShift(startTime, endTime){
-  const midnightTimestamp = new Date(endTime.getTime()).setHours(0,0,0,0), 
-    sixamTimestamp = new Date(endTime.getTime()).setHours(6,0,0,0);
+export function dayOrNightShift(startDate, endDate){
+  const hongKongStartDate = utcToHongKongDate(startDate);
+  const hongKongEndDate = utcToHongKongDate(endDate);
 
-  const midnight = new Date(hongKongtoUTCTimestamp(midnightTimestamp));
-  const sixam = new Date(hongKongtoUTCTimestamp(sixamTimestamp));
- 
-  if(!validShift(startTime, endTime))
+  const midnight = new Date(new Date(hongKongEndDate.getTime()).setUTCHours(0,0,0,0)), 
+  sixam = new Date(new Date(hongKongEndDate.getTime()).setUTCHours(6,0,0,0));
+  
+  if(!validShift(hongKongStartDate, hongKongEndDate))
     return "invalid";
-  else if( timeOverlap(startTime, endTime, midnight, sixam) )
+  else if( timeOverlap(hongKongStartDate, hongKongEndDate, midnight, sixam) )
     return "night";
   else
     return "day"
@@ -40,4 +41,20 @@ export function validShift(startTime, endTime){
     return false
 
   return true
+}
+
+export function getCosting(dateRange, cgRank, pricingChart): (ContinuousRangeCosting | RecurringRangeCosting){
+        
+  const type = dateRange['24 Hours']?'24 Hours':'Recurring';
+  let costingObject;
+
+  switch(type){
+      case '24 Hours': 
+          costingObject = new ContinuousRangeCosting(dateRange, cgRank, pricingChart, 12);
+          break;
+      case 'Recurring': 
+          costingObject = new RecurringRangeCosting(dateRange, cgRank, pricingChart);
+          break;
+  }
+  return costingObject;
 }

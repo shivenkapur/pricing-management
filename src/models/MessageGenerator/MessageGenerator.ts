@@ -1,30 +1,30 @@
-import { utcToHongKongDate, getTimeString } from '../helper/date-time';
+import { utcToHongKongDate, getTimeString } from '../../helper/date-time';
 export class MessageGenerator {
-    hubspotContact; caregiverRank; jobsCost;
+    hubspotContact; caregiverRank; shiftsCost;
 
-    constructor(hubspotContact, caregiverRank, jobsCost){
+    constructor(hubspotContact, caregiverRank, shiftsCost){
         this.hubspotContact = hubspotContact;
         this.caregiverRank = caregiverRank;
-        this.jobsCost = jobsCost;
+        this.shiftsCost = shiftsCost;
     }
 
     createDoodleMessage(){
         
-        const dateAndPriceString = this.getDoodleShiftCost(this.jobsCost);
+        const dateAndPriceString = this.getDoodleShiftCost();
         let message = this.getDoodleMessage(dateAndPriceString);
 
         return message;
     }
 
-    getDoodleShiftCost(jobsCost) {
+    getDoodleShiftCost() {
         let dateAndPriceString = '';
-        jobsCost.forEach((job, index) => {
-            job.forEach( (shift, index) => {
-                const dateString = this.getDoodleDateString(shift["Shift Range"]["Start Date"], shift["Shift Range"]["End Date"]);
-                dateAndPriceString += `\n*每更薪金*: ${shift['Total Charge']}\n`
-                dateAndPriceString += `工作時段${index+1}：${dateString}\n`
-            })   
-        })
+
+        this.shiftsCost.forEach((shift, index) => {
+            const dateString = this.getDoodleDateString(shift["Shift Range"]["Start Date"], shift["Shift Range"]["End Date"]);
+            
+            dateAndPriceString += `\n*每更薪金*: ${shift['Total Charge']}\n`;
+            dateAndPriceString += `工作時段${index+1}：${dateString}\n`;
+        });
 
         return dateAndPriceString;
     }
@@ -46,13 +46,13 @@ export class MessageGenerator {
     }
 
     getDoodleDateString(startDate, endDate){
-        startDate = utcToHongKongDate(startDate);
-        endDate = utcToHongKongDate(endDate);
-        return `${startDate.getMonth() + 1}月${startDate.getDate()}日` 
+        const hkStartDate = utcToHongKongDate(startDate);
+        const hkEndDate = utcToHongKongDate(endDate);
+        return `${hkStartDate.getUTCMonth() + 1}月${hkStartDate.getUTCDate()}日` 
             + ' 至 ' 
-            + `${endDate.getMonth() + 1}月${endDate.getDate()}日`
-            + ' ' + getTimeString(startDate)
-            + ' - ' + getTimeString(endDate)
+            + `${hkEndDate.getUTCMonth() + 1}月${hkEndDate.getUTCDate()}日`
+            + ' ' + getTimeString(hkStartDate)
+            + ' - ' + getTimeString(hkEndDate)
     }
 
     getBroadcastMessage(doodleMessage, doodleID){

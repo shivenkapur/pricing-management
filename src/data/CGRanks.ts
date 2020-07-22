@@ -1,0 +1,1 @@
+export const cgRanks = ['AHCW', 'HCW', 'PTA', 'OTA', 'EN', 'RN'];

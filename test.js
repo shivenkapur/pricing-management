@@ -1,3 +1,3 @@
-let cgMessage = 'undefined ljaljdslak undefined';
-
-console.log(cgMessage.replace(/undefined/g, ''))
+const services = {};
+if(!)
+services['12 hours']['dates'] = []

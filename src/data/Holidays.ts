@@ -201,13 +201,13 @@ export function getHolidayDate(date){
 
 function getHongKongDate(holidayDate){
     return hongKongtoUTCDate(
-        new Date(
+        new Date(Date.UTC(
             holidayDate.year, 
             months[holidayDate.month], 
             holidayDate.date, 
             holidayDate.hour, 
             holidayDate.minutes, 
             holidayDate.seconds
-        )
+        ))
     );
 }

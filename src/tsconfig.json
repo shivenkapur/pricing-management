@@ -3,6 +3,7 @@
   "compilerOptions": {
     "outDir": "../dist",
     "composite": true,
-    "lib": [ "esnext" ]
+    "lib": [ "ES2017" ],
+    "target": "ES2017"
   }
 }
