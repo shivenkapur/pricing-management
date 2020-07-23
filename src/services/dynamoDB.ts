@@ -9,44 +9,38 @@ AWS.config.update({
 });
 
 const ddbDocumentClient = new AWS.DynamoDB.DocumentClient();
-const tableName: string = "Zoho Contacts";
+const tableName: string = "ZohoContactData";
 const id: number = 1;
 
-export async function getZohoContact(): Promise<string> {
+export async function getZohoContact(clientId: string) {
     
     try {
         const params = {
             Key: {
-                "clientId": id, 
+                "clientId": clientId, 
             }, 
             TableName: tableName
         };
         const result = await ddbDocumentClient.get(params).promise()
     
-        console.log(result["Item"]["lastRunTime"])
-        return result["Item"]["lastRunTime"]
+        return result["Item"];
         
     } catch (error) {
-        console.error(error);
     }
 }
 
-export async function setZohoContact(id: number, zohoCustomerId): Promise <string> {
+export async function setZohoContact(clientId: string, zohoCustomerId): Promise <string> {
     
     try {
         const params = {
             TableName: tableName,
-            Key:{
-                "clientId": id,
-            },
-            UpdateExpression: "set zohoCustomerId = :d",
-            ExpressionAttributeValues:{
-                ":d": zohoCustomerId,
-            },
-            ReturnValues:"UPDATED_NEW"
-        };
-        const result = await ddbDocumentClient.update(params).promise()
-        return JSON.stringify(result)
+            Item:{
+                "clientId": clientId,
+                "zohoCustomerId": zohoCustomerId
+            }
+        }
+        const result = await ddbDocumentClient.put(params).promise();
+        return JSON.stringify(result);
     } catch (error) {
         console.error(error);
     }

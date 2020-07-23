@@ -83,8 +83,8 @@ export default [
     {
         Ranges: [
             {
-                "Start Date": 1601362800000, //December 29, 2019 8:00:00 AM GMT+08:00
-                "End Date": 1601629200000, //January 3, 2020 8:00:00 PM GMT+08:00
+                "Start Date": 1601362800000, //September 29, 2020 3:00:00 PM GMT+08:00
+                "End Date": 1601629200000, //October 2, 2020 5:00:00 PM GMT+08:00
                 "24 Hours": false
             },
         ],

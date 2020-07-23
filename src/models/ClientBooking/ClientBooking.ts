@@ -10,10 +10,9 @@ export default class ClientBooking {
         this.zoho = zoho;
     }
 
-    createZohoInvoice(){
+    async createZohoInvoice(){
         this.generateJobDetails();
-        this.zoho.generateZohoInvoiceItems(this.shiftsCost);
-        this.zoho.createInvoice();
+        await this.zoho.handleInvoiceCreation(this.shiftsCost);
     }
 
     generateJobDetails(){

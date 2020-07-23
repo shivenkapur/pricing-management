@@ -8,7 +8,7 @@ export default [
             },
         ],
         CGRank: 'RN',
-        ClientData: getRandomClient(3000),
+        ClientData: getRandomClient(79),
         Validation: [
             {
                 'General Charges': 2200,
@@ -86,9 +86,9 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
-function getRandomClient(max) {
+function getRandomClient(clientNumber) {
     return {
-        'Client Number': '1',//getRandomInt(max),
+        'Client Number': clientNumber,
         'Client Gender': 'M',
         'Age Group': '60-70',
         'Weight Group': '120 KGs - 130Kgs',

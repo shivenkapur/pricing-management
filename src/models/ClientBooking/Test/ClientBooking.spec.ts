@@ -12,9 +12,9 @@ describe('Create Zoho Invoice', async function() {
         };
 
         it('Create doodle for Client ' + job.ClientData["Client Number"] + ' Test Case: ' + job.TestName, async function() {
-            
-            const zoho = new Zoho();
+            const zoho = new Zoho(jobData);
             const clientBooking = new ClientBooking(jobData, zoho);
+            clientBooking.createZohoInvoice();
         });
     }); 
 });
