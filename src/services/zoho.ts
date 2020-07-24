@@ -10,12 +10,12 @@ const urls = {
 
 export async function handleAPICall(type, body) {
 
-    let data = await apiCall(type, body);
+    //let data = await apiCall(type, body);
    
-    if(data.message == 'You are not authorized to perform this operation'){
-        const credentials = await fetchAccessToken();
-        data = await apiCall(type, body);
-    }
+    //if(data.message == 'You are not authorized to perform this operation'){
+        const accessToken = await fetchAccessToken();
+        let data = await apiCall(type, body, accessToken);
+    //}
 
     return data;
 }
@@ -36,7 +36,7 @@ export async function fetchAccessToken(){
         let credentials = JSON.stringify({
             "access_token": data["access_token"]
         });
-        fs.writeFileSync(process.cwd() + '/src/config/zoho-access-token.json', credentials);
+        //fs.writeFileSync(process.cwd() + '/src/config/zoho-access-token.json', credentials);
     }
 
     return data["access_token"];
@@ -49,8 +49,8 @@ function getStoredAccessToken(){
     return accessToken;
 }
 
-export async function apiCall(type, body){
-    const accessToken = getStoredAccessToken();
+export async function apiCall(type, body, accessToken){
+    //const accessToken = getStoredAccessToken();
 
     let response = await fetch(urls[type],
         {
