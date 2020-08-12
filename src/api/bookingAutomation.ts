@@ -20,7 +20,7 @@ export default async function bookingAutomation(req, res) {
 
         const messages = await handleCaregiverHiring(jobData); 
         
-        await handleClientBooking(jobData);
+        //await handleClientBooking(jobData);
         res.json(messages);
         
     } else {

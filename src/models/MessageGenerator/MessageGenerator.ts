@@ -57,9 +57,10 @@ export class MessageGenerator {
 
     getBroadcastMessage(doodleMessage, doodleID){
         let broadcastMessage = doodleMessage +  
-        `\n 1) 點擊網址, :bangbang:*只輸入電話號碼報名*:bangbang:, 在可行日子打Tick, 並遞交` +
+        `\n 1) 點擊網址, :bangbang:*只需輸入電話號碼*:bangbang:, *請務必確保日子可行才遞交*` +
         `\n*觀看教學影片https://bit.ly/2NUst9G`+
-        `\n\nhttps://doodle.com/poll/${doodleID}`
+        `\n\nhttps://doodle.com/poll/${doodleID}`+
+        `\n 2）填妥後告知並於3個工作天預留時間，被挑選的同事會收到確認訊息。如3個工作天後仍未得到回覆則視為落選，感謝參與。`
 
         broadcastMessage = broadcastMessage.replace(/undefined/g, '')
         return broadcastMessage;
